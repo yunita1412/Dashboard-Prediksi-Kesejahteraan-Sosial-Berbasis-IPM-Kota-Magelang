@@ -6,5 +6,5 @@ plotly
 prophet
 scikit-learn
 xgboost
-shap
+shap>=0.48
 openpyxl
