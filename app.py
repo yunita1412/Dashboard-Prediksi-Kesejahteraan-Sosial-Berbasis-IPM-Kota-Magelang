@@ -397,7 +397,7 @@ elif menu == "Analisis Faktor":
     for fitur in top5["Faktor Penentu IPM"]:
         if fitur in rekomendasi:
             st.success(
-                f"**{fitur}** → {rekomendasi[fitur]}"
+                f"**{rekomendasi[fitur]}"
             )
     
     st.subheader("Faktor Pendorong Utama")
