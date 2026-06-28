@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import shap
 import xgboost as xgb
 import plotly.express as px
 import os
@@ -21,11 +20,23 @@ st.set_page_config(
     layout="wide"
 )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
 
 DATA_PATH = os.path.join(
     BASE_DIR,
     "dataset_final.xlsx"
+)
+
+MEAN_SHAP_PATH = os.path.join(
+    BASE_DIR,
+    "mean_shap.xlsx"
+)
+
+FEATURE_IMPORTANCE_PATH = os.path.join(
+    BASE_DIR,
+    "feature_importance.xlsx"
 )
 
 if not os.path.exists(DATA_PATH):
@@ -124,13 +135,13 @@ xgb_model_final = xgb.XGBRegressor(
 )
 xgb_model_final.fit(X_selected, y)
 
-explainer = shap.TreeExplainer(xgb_model_final)
-shap_values = explainer.shap_values(X_selected)
+mean_shap = pd.read_excel(
+    MEAN_SHAP_PATH
+)
 
-mean_shap = pd.DataFrame({
-    "Fitur": X_selected.columns,
-    "Mean_SHAP": np.abs(shap_values).mean(axis=0)
-}).sort_values(by="Mean_SHAP", ascending=False)
+feature_importance = pd.read_excel(
+    FEATURE_IMPORTANCE_PATH
+)
 
 top5 = mean_shap.head(5).reset_index(drop=True)
 
