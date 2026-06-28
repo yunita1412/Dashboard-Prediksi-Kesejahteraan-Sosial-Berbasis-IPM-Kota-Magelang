@@ -379,13 +379,13 @@ elif menu == "Analisis Faktor":
     columns={
         "Feature": "Faktor Penentu IPM",
         "Mean_SHAP": "Nilai Pengaruh Rata-rata"
-    }
-)
+        }
+    )
 
-top5 = mean_shap_display.head(5)
-
-st.subheader("Faktor Pendorong Utama")
-st.dataframe(top5, use_container_width=True)
+    top5 = mean_shap_display.head(5)
+    
+    st.subheader("Faktor Pendorong Utama")
+    st.dataframe(top5, use_container_width=True)
 
     f1 = top5.iloc[0]["Feature"]
     f2 = top5.iloc[1]["Feature"]
