@@ -499,9 +499,9 @@ elif menu == "Informasi Sistem":
 
     {i} < 10% = Sangat Baik
 
-    {i} 10% – 20% = Baik
+    {i} 10% (U+2013) 20% = Baik
 
-    {i} 20% – 50% = Cukup
+    {i} 20% (U+2013) 50% = Cukup
 
     {i} > 50% = Kurang Baik
 
