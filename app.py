@@ -157,6 +157,7 @@ xgb_model_final = xgb.XGBRegressor(
     subsample=0.8, colsample_bytree=0.8, random_state=42
 )
 xgb_model_final.fit(X_selected, y)
+xgb_model_final.save_model("model_xgb_ipm.json")
 
 mean_shap = pd.read_excel(
     MEAN_SHAP_PATH
