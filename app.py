@@ -394,7 +394,7 @@ elif menu == "Analisis Faktor":
             "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
         }
     
-        for fitur in top5["Faktor Penentu IMP"]:
+        for fitur in top5["Faktor Penentu IPM"]:
             if fitur in rekomendasi:
                 st.success(rekomendasi[fitur])
     
