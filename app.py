@@ -387,8 +387,6 @@ elif menu == "Analisis Faktor":
     f1 = top5.iloc[0]["Faktor Penentu IPM"]
     f2 = top5.iloc[1]["Faktor Penentu IPM"]
     f3 = top5.iloc[2]["Faktor Penentu IPM"]
-
-    st.subheader("Rekomendasi Kebijakan")
     
     st.subheader("Rekomendasi Kebijakan")
     
