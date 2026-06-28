@@ -73,7 +73,7 @@ rmse = np.sqrt(mean_squared_error(test["y"], forecast_test["yhat"]))
 mape = mean_absolute_percentage_error(test["y"], forecast_test["yhat"]) * 100
 
 future = prophet_model.make_future_dataframe(
-    periods=25, 
+    periods=30, 
     freq="QS"
 )
 
