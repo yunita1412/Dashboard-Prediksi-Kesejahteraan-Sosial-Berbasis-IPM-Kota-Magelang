@@ -389,28 +389,23 @@ elif menu == "Analisis Faktor":
 
     st.subheader("Rekomendasi Kebijakan")
     
-    rekomendasi = {
+    st.ifo (
+        rekomendasi = {
         "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
         "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
         "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
         "BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
         "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
     }
+    )
     
-    for i, fitur in enumerate(top5["Faktor Penentu IPM"], start=1):
+    for fitur in top5["Feature"]:
         if fitur in rekomendasi:
-            st.markdown(f"""
-            <div style="
-                background-color:#EAF2FF;
-            ">
-            <b>Rekomendasi {i}</b><br>
-            {rekomendasi[fitur]}
-            </div>
-        """, unsafe_allow_html=True)
+            st.success(rekomendasi[fitur])
     
     st.subheader("Faktor Yang Perlu Diperhatikan")
     
-    perhatian = [
+    st.info(
         f"""
         Faktor utama yang mempengaruhi IPM adalah
         {top5.iloc[0]['Faktor Penentu IPM']}, {top5.iloc[1]['Faktor Penentu IPM']},
@@ -419,15 +414,7 @@ elif menu == "Analisis Faktor":
         Prioritas kebijakan sebaiknya difokuskan
         pada indikator-indikator tersebut untuk
         mendukung peningkatan IPM di masa mendatang.
-        """
-    ]
-
-    for p in perhatian:
-        st.markdown(f"""
-            <div style="
-                background-color:#EAF2FF;
-            ", unsafe_allow_html=True
-        st.warning(p)
+        """)
 
 elif menu == "Informasi Sistem":
 
