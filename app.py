@@ -220,6 +220,68 @@ elif menu == "Prediksi IPM":
         .mean()
         .reset_index()
     )
+    
+    aktual = (
+        df.groupby("Tahun")["IPM"]
+        .mean()
+        .reset_index()
+    )
+
+    aktual["Jenis"] = "Aktual"
+    aktual.columns = ["Tahun", "Nilai", "Jenis"]
+
+    forecast_plot = forecast.copy()
+    forecast_plot["Tahun"] = forecast_plot["ds"].dt.year
+
+    pred_tahun = (
+        forecast_plot.groupby("Tahun")["yhat"]
+        .mean()
+        .reset_index()
+    )
+
+    prediksi = pred_tahun.copy()
+    prediksi["Jenis"] = "Prediksi"
+    prediksi.columns = ["Tahun", "Nilai", "Jenis"]
+
+    prediksi = prediksi[
+        prediksi["Tahun"] <= tahun_pilihan
+    ]
+
+    gabung = pd.concat([aktual, prediksi])
+
+    fig = px.line(
+        gabung,
+        x="Tahun",
+        y="Nilai",
+        color="Jenis",
+        markers=True,
+        title=f"IPM Aktual dan Prediksi hingga Tahun {tahun_pilihan}"
+    )
+
+    fig.update_traces(
+        selector=dict(name="Prediksi"),
+        line=dict(color="#FF0000"),
+        marker=dict(color="#FF0000", size=5)
+    )
+
+    fig.update_traces(
+        selector=dict(name="Aktual"),
+        line=dict(color="#FFD700"),
+        marker=dict(color="#FFD700", size=10)
+    )
+
+    fig.update_layout(
+        xaxis_title="Tahun",
+        yaxis_title="IPM"
+    )
+
+    fig.update_xaxes(
+        tickmode="linear",
+        tick0=2010, 
+        dtick=2     
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
     pred_tahun.columns = ["Tahun", "Prediksi"]
 
@@ -290,72 +352,6 @@ elif menu == "Prediksi IPM":
         {abs(selisih):.2f} poin.
         """
     )
-
-    st.markdown("---")
-
-    st.subheader("Grafik Historis dan Prediksi")
-
-    aktual = (
-        df.groupby("Tahun")["IPM"]
-        .mean()
-        .reset_index()
-    )
-
-    aktual["Jenis"] = "Aktual"
-    aktual.columns = ["Tahun", "Nilai", "Jenis"]
-
-    forecast_plot = forecast.copy()
-    forecast_plot["Tahun"] = forecast_plot["ds"].dt.year
-
-    pred_tahun = (
-        forecast_plot.groupby("Tahun")["yhat"]
-        .mean()
-        .reset_index()
-    )
-
-    prediksi = pred_tahun.copy()
-    prediksi["Jenis"] = "Prediksi"
-    prediksi.columns = ["Tahun", "Nilai", "Jenis"]
-
-    prediksi = prediksi[
-        prediksi["Tahun"] <= tahun_pilihan
-    ]
-
-    gabung = pd.concat([aktual, prediksi])
-
-    fig = px.line(
-        gabung,
-        x="Tahun",
-        y="Nilai",
-        color="Jenis",
-        markers=True,
-        title=f"IPM Aktual dan Prediksi hingga Tahun {tahun_pilihan}"
-    )
-
-    fig.update_traces(
-        selector=dict(name="Prediksi"),
-        line=dict(color="#FF0000"),
-        marker=dict(color="#FF0000", size=5)
-    )
-
-    fig.update_traces(
-        selector=dict(name="Aktual"),
-        line=dict(color="#FFD700"),
-        marker=dict(color="#FFD700", size=10)
-    )
-
-    fig.update_layout(
-        xaxis_title="Tahun",
-        yaxis_title="IPM"
-    )
-
-    fig.update_xaxes(
-        tickmode="linear",
-        tick0=2010, 
-        dtick=2     
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
     
 elif menu == "Analisis Faktor":
 
