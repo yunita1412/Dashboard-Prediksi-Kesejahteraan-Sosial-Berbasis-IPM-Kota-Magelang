@@ -389,7 +389,7 @@ elif menu == "Analisis Faktor":
 
     st.subheader("Rekomendasi Kebijakan")
     
-    st.ifo (
+    st.ifo(
         rekomendasi = {
         "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
         "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
