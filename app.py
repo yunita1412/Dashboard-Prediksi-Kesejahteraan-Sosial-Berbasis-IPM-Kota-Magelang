@@ -402,9 +402,6 @@ elif menu == "Analisis Faktor":
             st.markdown(f"""
             <div style="
                 background-color:#EAF2FF;
-                padding:15px;
-                border-radius:10px;
-                margin-bottom:10px;
             ">
             <b>Rekomendasi {i}</b><br>
             {rekomendasi[fitur]}
@@ -429,9 +426,6 @@ elif menu == "Analisis Faktor":
         st.markdown(f"""
             <div style="
                 background-color:#EAF2FF;
-                padding:15px;
-                border-radius:10px;
-                margin-bottom:10px;
             ", unsafe_allow_html=True
         st.warning(p)
 
@@ -497,19 +491,19 @@ elif menu == "Informasi Sistem":
 
     Interpretasi MAPE:
 
-    {i} < 10% = Sangat Baik
+    • < 10% = Sangat Baik
 
-    {i} 10% (U+2013) 20% = Baik
+    • 10% – 20% = Baik
 
-    {i} 20% (U+2013) 50% = Cukup
+    • 20% – 50% = Cukup
 
-    {i} > 50% = Kurang Baik
+    • > 50% = Kurang Baik
 
     ---
 
-    ### Koefisien Determinasi (R^2)
+    ### Koefisien Determinasi (R²)
 
-    R^2 menunjukkan seberapa besar
+    R² menunjukkan seberapa besar
     variasi IPM yang dapat dijelaskan
     oleh variabel dalam model.
 
