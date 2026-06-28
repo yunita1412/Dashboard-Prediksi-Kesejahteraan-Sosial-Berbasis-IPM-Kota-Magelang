@@ -20,6 +20,29 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+div[data-testid="stMetric"]{
+    background-color:#EAF2FF;
+    border-left:6px solid #F4B400;
+    padding:15px;
+    border-radius:10px;
+}
+
+h1,h2,h3{
+    color:#0F4C81;
+}
+
+section[data-testid="stSidebar"]{
+    background-color:#0F4C81;
+}
+
+section[data-testid="stSidebar"] *{
+    color:white;
+}
+</style>
+""", unsafe_allow_html=True)
+
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
