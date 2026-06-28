@@ -343,7 +343,7 @@ elif menu == "Analisis Faktor":
     )
 
     ax.barh(
-            mean_shap["Fitur"],
+            mean_shap["Feature"],
             mean_shap["Mean_SHAP"]
     )
 
