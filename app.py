@@ -380,17 +380,15 @@ elif menu == "Analisis Faktor":
 
     top5 = mean_shap_display.head(5)
 
-    st.markdown(
-        "<h3 style='color:#42A5F5;'>Rekomendasi Kebijakan</h3>",
-        unsafe_allow_html=True
-    )
-
+    st.subheader("Rekomendasi Kebijakan")
+    
     rekomendasi = {
-        "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
-        "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-        "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
-        "BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
-        "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
+        "<h3 style='color:#42A5F5;Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.</h3>",
+        "<h3 style='color:#42A5F5;Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.</h3>",
+        "<h3 style='color:#42A5F5;GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.</h3>",
+        "<h3 style='color:#42A5F5;BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.</h3>",
+        "<h3 style='color:#42A5F5;Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM.</h3>",
+        unsafe_allow_html=True
     }
     
     for fitur in top5["Faktor Penentu IPM"]:
@@ -406,10 +404,7 @@ elif menu == "Analisis Faktor":
     f2 = top5.iloc[1]["Faktor Penentu IPM"]
     f3 = top5.iloc[2]["Faktor Penentu IPM"]
 
-    st.markdown(
-        "<h3 style='color:#42A5F5;'>Faktor yang Perlu Diperhatikan</h3>",
-        unsafe_allow_html=True
-    )
+    st.subheader("Faktor Yang Perlu Diperhatikan")
     
     perhatian = [
         f"""
