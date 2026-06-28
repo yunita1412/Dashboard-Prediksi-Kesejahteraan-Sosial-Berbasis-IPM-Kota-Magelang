@@ -507,9 +507,9 @@ elif menu == "Informasi Sistem":
 
     ---
 
-    ### Koefisien Determinasi (R²)
+    ### Koefisien Determinasi (R\u00B2)
 
-    R² menunjukkan seberapa besar
+    R\u00B2 menunjukkan seberapa besar
     variasi IPM yang dapat dijelaskan
     oleh variabel dalam model.
 
