@@ -387,50 +387,40 @@ elif menu == "Analisis Faktor":
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
 
-    f1 = top5.iloc[0]["Feature"]
-    f2 = top5.iloc[1]["Feature"]
-    f3 = top5.iloc[2]["Feature"]
+    f1 = top5.iloc[0]["Faktor Penentu IPM"]
+    f2 = top5.iloc[1]["Faktor Penentu IPM"]
+    f3 = top5.iloc[2]["Faktor Penentu IPM"]
 
     st.subheader("Faktor yang Perlu Diperhatikan")
 
     perhatian = [
-        f"{f1}",
-        f"{f2}",
-        f"{f3}"
-    ]
-
-    for p in perhatian:
-        st.warning(p)
-
-elif menu == "Rekomendasi Kebijakan":
-
-    st.title("Rekomendasi Kebijakan")
-
-    rekomendasi = {
-        "Bekerja":"Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
-        "Pengangguran":"Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-        "GiziKurang":"Pemerataan program peningkatan gizi masyarakat.",
-        "BalitaDitimbang":"Mempertahankan program Posyandu untuk Balita.",
-        "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
-    }
-
-    for fitur in top5["Feature"]:
-        if fitur in rekomendasi:
-            st.success(rekomendasi[fitur])
-
-    st.subheader("Kesimpulan Sistem")
-
-    st.info(
         f"""
         Faktor utama yang mempengaruhi IPM adalah
-        {top5.iloc[0]['Feature']}, {top5.iloc[1]['Feature']},
-        dan {top5.iloc[2]['Feature']}.
+        {top5.iloc[0]['Faktor Penentu IPM']}, {top5.iloc[1]['Faktor Penentu IPM']},
+        dan {top5.iloc[2]['Faktor Penentu IPM']}.
 
         Prioritas kebijakan sebaiknya difokuskan
         pada indikator-indikator tersebut untuk
         mendukung peningkatan IPM di masa mendatang.
         """
-    )
+    ]
+
+    for p in perhatian:
+        st.warning(p)
+
+    st.subheader("Rekomendasi Kebijakan")
+    
+        rekomendasi = {
+            "Bekerja":"Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
+            "Pengangguran":"Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
+            "GiziKurang":"Pemerataan program peningkatan gizi masyarakat.",
+            "BalitaDitimbang":"Mempertahankan program Posyandu untuk Balita.",
+            "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
+        }
+    
+        for fitur in top5["Feature"]:
+            if fitur in rekomendasi:
+                st.success(rekomendasi[fitur])
 
 elif menu == "Informasi Sistem":
 
