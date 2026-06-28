@@ -355,9 +355,9 @@ elif menu == "Analisis Faktor":
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
 
-    f1 = top5.iloc[0]["Fitur"]
-    f2 = top5.iloc[1]["Fitur"]
-    f3 = top5.iloc[2]["Fitur"]
+    f1 = top5.iloc[0]["Feature"]
+    f2 = top5.iloc[1]["Feature"]
+    f3 = top5.iloc[2]["Feature"]
 
     st.subheader("Faktor yang Perlu Diperhatikan")
 
@@ -382,7 +382,7 @@ elif menu == "Rekomendasi Kebijakan":
         "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
     }
 
-    for fitur in top5["Fitur"]:
+    for fitur in top5["Feature"]:
         if fitur in rekomendasi:
             st.success(rekomendasi[fitur])
 
@@ -391,8 +391,8 @@ elif menu == "Rekomendasi Kebijakan":
     st.info(
         f"""
         Faktor utama yang mempengaruhi IPM adalah
-        {top5.iloc[0]['Fitur']}, {top5.iloc[1]['Fitur']},
-        dan {top5.iloc[2]['Fitur']}.
+        {top5.iloc[0]['Feature']}, {top5.iloc[1]['Feature']},
+        dan {top5.iloc[2]['Feature']}.
 
         Prioritas kebijakan sebaiknya difokuskan
         pada indikator-indikator tersebut untuk
