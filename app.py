@@ -139,7 +139,7 @@ for train_idx, test_idx in kf.split(X_selected, y):
     
     fold_model = xgb.XGBRegressor(
         n_estimators=60, learning_rate=0.03, max_depth=2,
-        subsample=0.7, colsample_bytree=0.7, random_state=42
+        subsample=0.8, colsample_bytree=0.8, random_state=42
     )
     fold_model.fit(X_train_f, y_train_f)
     preds_f = fold_model.predict(X_test_f)
@@ -154,7 +154,7 @@ xgb_r2_cv = np.mean(xgb_r2_scores)
 
 xgb_model_final = xgb.XGBRegressor(
     n_estimators=60, learning_rate=0.03, max_depth=2,
-    subsample=0.7, colsample_bytree=0.7, random_state=42
+    subsample=0.8, colsample_bytree=0.8, random_state=42
 )
 xgb_model_final.fit(X_selected, y)
 
