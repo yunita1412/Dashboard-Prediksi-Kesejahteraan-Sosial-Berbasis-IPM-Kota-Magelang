@@ -391,18 +391,18 @@ elif menu == "Analisis Faktor":
     }
     
     for i, fitur in enumerate(top5["Faktor Penentu IPM"], start=1):
-    if fitur in rekomendasi:
-        st.markdown(f"""
-        <div style="
-            background-color:#EAF2FF;
-            border-left:6px solid #42A5F5;
-            padding:15px;
-            border-radius:10px;
-            margin-bottom:10px;
-        ">
-        <b>Rekomendasi {i}</b><br>
-        {rekomendasi[fitur]}
-        </div>
+        if fitur in rekomendasi:
+            st.markdown(f"""
+            <div style="
+                background-color:#EAF2FF;
+                border-left:6px solid #42A5F5;
+                padding:15px;
+                border-radius:10px;
+                margin-bottom:10px;
+            ">
+            <b>Rekomendasi {i}</b><br>
+            {rekomendasi[fitur]}
+            </div>
         """, unsafe_allow_html=True)
     
     st.subheader("Faktor Pendorong Utama")
