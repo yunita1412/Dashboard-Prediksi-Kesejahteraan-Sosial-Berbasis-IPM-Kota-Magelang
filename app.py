@@ -383,6 +383,20 @@ elif menu == "Analisis Faktor":
     )
 
     top5 = mean_shap_display.head(5)
+
+    st.subheader("Rekomendasi Kebijakan")
+    
+        rekomendasi = {
+            "Bekerja":"Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
+            "Pengangguran":"Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
+            "GiziKurang":"Pemerataan program peningkatan gizi masyarakat.",
+            "BalitaDitimbang":"Mempertahankan program Posyandu untuk Balita.",
+            "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
+        }
+    
+        for fitur in top5["Faktor Penentu IMP"]:
+            if fitur in rekomendasi:
+                st.success(rekomendasi[fitur])
     
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
@@ -407,20 +421,6 @@ elif menu == "Analisis Faktor":
 
     for p in perhatian:
         st.warning(p)
-
-    st.subheader("Rekomendasi Kebijakan")
-    
-        rekomendasi = {
-            "Bekerja":"Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
-            "Pengangguran":"Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-            "GiziKurang":"Pemerataan program peningkatan gizi masyarakat.",
-            "BalitaDitimbang":"Mempertahankan program Posyandu untuk Balita.",
-            "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
-        }
-    
-        for fitur in top5["Feature"]:
-            if fitur in rekomendasi:
-                st.success(rekomendasi[fitur])
 
 elif menu == "Informasi Sistem":
 
