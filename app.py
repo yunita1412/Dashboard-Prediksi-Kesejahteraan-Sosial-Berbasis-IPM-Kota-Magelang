@@ -380,7 +380,10 @@ elif menu == "Analisis Faktor":
 
     top5 = mean_shap_display.head(5)
 
-    st.subheader("Rekomendasi Kebijakan")
+    st.markdown(
+        "<h3 style='color:#42A5F5;'>Rekomendasi Kebijakan</h3>",
+        unsafe_allow_html=True
+    )
 
     rekomendasi = {
         "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
@@ -403,8 +406,11 @@ elif menu == "Analisis Faktor":
     f2 = top5.iloc[1]["Faktor Penentu IPM"]
     f3 = top5.iloc[2]["Faktor Penentu IPM"]
 
-    st.subheader("Faktor yang Perlu Diperhatikan")
-
+    st.markdown(
+        "<h3 style='color:#42A5F5;'>Faktor yang Perlu Diperhatikan</h3>",
+        unsafe_allow_html=True
+    )
+    
     perhatian = [
         f"""
         Faktor utama yang mempengaruhi IPM adalah
