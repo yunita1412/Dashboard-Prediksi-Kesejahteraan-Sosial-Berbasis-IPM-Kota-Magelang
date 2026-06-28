@@ -385,18 +385,20 @@ elif menu == "Analisis Faktor":
     top5 = mean_shap_display.head(5)
 
     st.subheader("Rekomendasi Kebijakan")
-    
+
     rekomendasi = {
-            "Bekerja":"Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
-            "Pengangguran":"Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-            "GiziKurang":"Pemerataan program peningkatan gizi masyarakat.",
-            "BalitaDitimbang":"Mempertahankan program Posyandu untuk Balita.",
-            "Pertumbuhan_Ekonomi":"Mendorong pertumbuhan ekonomi daerah."
-        }
+        "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
+        "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
+        "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
+        "BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
+        "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
+    }
     
-        for fitur in top5["Faktor Penentu IPM"]:
-            if fitur in rekomendasi:
-                st.success(rekomendasi[fitur])
+    for fitur in top5["Faktor Penentu IPM"]:
+        if fitur in rekomendasi:
+            st.success(
+                f"**{fitur}** → {rekomendasi[fitur]}"
+            )
     
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
