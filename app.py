@@ -497,13 +497,13 @@ elif menu == "Informasi Sistem":
 
     Interpretasi MAPE:
 
-    • < 10% = Sangat Baik
+    {i} < 10% = Sangat Baik
 
-    • 10% – 20% = Baik
+    {i} 10% – 20% = Baik
 
-    • 20% – 50% = Cukup
+    {i} 20% – 50% = Cukup
 
-    • > 50% = Kurang Baik
+    {i} > 50% = Kurang Baik
 
     ---
 
