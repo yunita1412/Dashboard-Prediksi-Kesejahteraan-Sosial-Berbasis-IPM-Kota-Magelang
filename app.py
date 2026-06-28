@@ -379,6 +379,13 @@ elif menu == "Analisis Faktor":
     )
 
     top5 = mean_shap_display.head(5)
+    
+    st.subheader("Faktor Pendorong Utama")
+    st.dataframe(top5, use_container_width=True)
+
+    f1 = top5.iloc[0]["Faktor Penentu IPM"]
+    f2 = top5.iloc[1]["Faktor Penentu IPM"]
+    f3 = top5.iloc[2]["Faktor Penentu IPM"]
 
     st.subheader("Rekomendasi Kebijakan")
     
@@ -395,7 +402,6 @@ elif menu == "Analisis Faktor":
             st.markdown(f"""
             <div style="
                 background-color:#EAF2FF;
-                border-left:6px solid #42A5F5;
                 padding:15px;
                 border-radius:10px;
                 margin-bottom:10px;
@@ -405,13 +411,6 @@ elif menu == "Analisis Faktor":
             </div>
         """, unsafe_allow_html=True)
     
-    st.subheader("Faktor Pendorong Utama")
-    st.dataframe(top5, use_container_width=True)
-
-    f1 = top5.iloc[0]["Faktor Penentu IPM"]
-    f2 = top5.iloc[1]["Faktor Penentu IPM"]
-    f3 = top5.iloc[2]["Faktor Penentu IPM"]
-
     st.subheader("Faktor Yang Perlu Diperhatikan")
     
     perhatian = [
@@ -427,6 +426,13 @@ elif menu == "Analisis Faktor":
     ]
 
     for p in perhatian:
+        st.markdown(f"""
+            <div style="
+                background-color:#EAF2FF;
+                padding:15px;
+                border-radius:10px;
+                margin-bottom:10px;
+            ", unsafe_allow_html=True
         st.warning(p)
 
 elif menu == "Informasi Sistem":
