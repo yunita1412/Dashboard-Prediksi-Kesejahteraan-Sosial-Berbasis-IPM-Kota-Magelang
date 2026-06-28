@@ -389,19 +389,19 @@ elif menu == "Analisis Faktor":
 
     st.subheader("Rekomendasi Kebijakan")
     
-    st.ifo(
-        rekomendasi = {
+    st.subheader("Rekomendasi Kebijakan")
+    
+    rekomendasi = {
         "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
         "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
         "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
         "BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
         "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
     }
-    )
     
-    for fitur in top5["Feature"]:
+    for fitur in top5["Faktor Penentu IPM"]:
         if fitur in rekomendasi:
-            st.success(rekomendasi[fitur])
+            st.info(rekomendasi[fitur])
     
     st.subheader("Faktor Yang Perlu Diperhatikan")
     
