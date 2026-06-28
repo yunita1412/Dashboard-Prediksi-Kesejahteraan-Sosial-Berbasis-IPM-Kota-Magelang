@@ -383,19 +383,27 @@ elif menu == "Analisis Faktor":
     st.subheader("Rekomendasi Kebijakan")
     
     rekomendasi = {
-        "<h3 style='color:#42A5F5;Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.</h3>",
-        "<h3 style='color:#42A5F5;Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.</h3>",
-        "<h3 style='color:#42A5F5;GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.</h3>",
-        "<h3 style='color:#42A5F5;BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.</h3>",
-        "<h3 style='color:#42A5F5;Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM.</h3>",
-        unsafe_allow_html=True
+        "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
+        "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
+        "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
+        "BalitaDitimbang": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
+        "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
     }
     
-    for fitur in top5["Faktor Penentu IPM"]:
-        if fitur in rekomendasi:
-            st.success(
-                f"{rekomendasi[fitur]}"
-            )
+    for i, fitur in enumerate(top5["Faktor Penentu IPM"], start=1):
+    if fitur in rekomendasi:
+        st.markdown(f"""
+        <div style="
+            background-color:#EAF2FF;
+            border-left:6px solid #42A5F5;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:10px;
+        ">
+        <b>Rekomendasi {i}</b><br>
+        {rekomendasi[fitur]}
+        </div>
+        """, unsafe_allow_html=True)
     
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
