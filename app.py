@@ -387,17 +387,13 @@ elif menu == "Analisis Faktor":
     f1 = top5.iloc[0]["Faktor Penentu IPM"]
     f2 = top5.iloc[1]["Faktor Penentu IPM"]
     f3 = top5.iloc[2]["Faktor Penentu IPM"]
-    f4 = top5.iloc[3]["Faktor Penentu IPM"]
-    f5 = top5.iloc[4]["Faktor Penentu IPM"]
     
     st.subheader("Rekomendasi Kebijakan")
     
     rekomendasi = {
         "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
         "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-        "GiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
-        "GiziBaik": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
-        "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
+        "GiziBaik": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita."
     }
     
     for fitur in top5["Faktor Penentu IPM"]:
