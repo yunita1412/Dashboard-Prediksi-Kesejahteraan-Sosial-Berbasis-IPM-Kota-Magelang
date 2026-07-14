@@ -393,10 +393,8 @@ elif menu == "Analisis Faktor":
     st.subheader("Rekomendasi Kebijakan")
     
     rekomendasi = {
-        "Bekerja": "Meningkatkan kesempatan kerja dan produktivitas tenaga kerja.",
-        "Pengangguran": "Menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
-        "BalitaGiziKurang": "Meningkatkan program perbaikan gizi masyarakat.",
-        "BalitaGiziBaik": "Memperkuat layanan Posyandu dan pemantauan kesehatan balita.",
+        "Bekerja, Penganggguran": "Meningkatkan kesempatan kerja dan menurunkan tingkat pengangguran melalui penciptaan lapangan kerja.",
+        "BalitaGiziKurang, BalitaGiziBaik": "Memperkuat layanan Posyandu dan meningkatkan program perbaikan gizi balita.",
         "Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."
     }
     
