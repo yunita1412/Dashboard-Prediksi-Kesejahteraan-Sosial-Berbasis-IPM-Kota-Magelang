@@ -68,25 +68,28 @@ menu = st.sidebar.radio(
     ["Beranda","Prediksi IPM","Analisis Faktor","Informasi Sistem"]
 )
 
-RESULT_DIR = os.path.join(BASE_DIR, "result")
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
+
 forecast = pd.read_excel(
-    os.path.join(DATASET_DIR, "dataset_xgboost.xlsx")
+    os.path.join("dataset_xgboost.xlsx")
 )
 
 evaluasi_prophet = pd.read_excel(
-    os.path.join(RESULT_DIR, "evaluasi_prophet.xlsx")
+    os.path.join("evaluasi_prophet.xlsx")
 )
 
 evaluasi_xgboost = pd.read_excel(
-    os.path.join(RESULT_DIR, "evaluasi_xgboost.xlsx")
+    os.path.join("evaluasi_xgboost.xlsx")
 )
 
 mean_shap = pd.read_excel(
-    os.path.join(RESULT_DIR, "mean_shap.xlsx")
+    os.path.join("mean_shap.xlsx")
 )
 
 feature_importance = pd.read_excel(
-    os.path.join(RESULT_DIR, "feature_importance.xlsx")
+    os.path.join("feature_importance.xlsx")
 )
 
 top5 = mean_shap.head(5).reset_index(drop=True)
