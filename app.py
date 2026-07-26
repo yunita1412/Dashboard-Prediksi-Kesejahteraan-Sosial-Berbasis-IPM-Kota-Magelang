@@ -1,19 +1,8 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import xgboost as xgb
 import plotly.express as px
 import os
-
-from sklearn.model_selection import KFold
-from prophet import Prophet
-from sklearn.metrics import (
-    mean_absolute_error,
-    mean_squared_error,
-    r2_score,
-    mean_absolute_percentage_error
-)
 
 st.set_page_config(
     page_title="Dashboard Prediksi Kesejahteraan Sosial Berbasis IPM Kota Magelang",
@@ -48,19 +37,23 @@ BASE_DIR = os.path.dirname(
 )
 
 DATA_PATH = os.path.join(
-    BASE_DIR,
-    "dataset_final.xlsx"
+    BASE_DIR, "DATASET", "dataset_final.xlsx"
+)
+
+FORECAST_IPM = os.path.join(
+    BASE_DIR, "result", "forecast_ipm.xlxs"
 )
 
 MEAN_SHAP_PATH = os.path.join(
-    BASE_DIR,
-    "mean_shap.xlsx"
+    BASE_DIR, "result", "mean_shap.xlsx"
 )
 
 FEATURE_IMPORTANCE_PATH = os.path.join(
-    BASE_DIR,
-    "feature_importance.xlsx"
+    BASE_DIR, "result", "feature_importance.xlsx"
 )
+
+RESULT_DIR = os.path.join(BASE_DIR, "result")
+DATASET_DIR = os.path.join(BASE_DIR, "DATASET")
 
 if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(
@@ -78,93 +71,25 @@ menu = st.sidebar.radio(
     ["Beranda","Prediksi IPM","Analisis Faktor","Informasi Sistem"]
 )
 
-prophet_df = df[["ds","IPM"]].copy()
-prophet_df.columns = ["ds","y"]
-prophet_df["ds"] = pd.to_datetime(prophet_df["ds"])
-
-split = int(len(prophet_df)*0.8)
-train = prophet_df[:split]
-test = prophet_df[split:]
-
-prophet_model = Prophet(yearly_seasonality=True)
-prophet_model.fit(train)
-
-forecast_test = prophet_model.predict(test[["ds"]])
-
-mae = mean_absolute_error(test["y"], forecast_test["yhat"])
-rmse = np.sqrt(mean_squared_error(test["y"], forecast_test["yhat"]))
-mape = mean_absolute_percentage_error(test["y"], forecast_test["yhat"]) * 100
-
-future = prophet_model.make_future_dataframe(
-    periods=30, 
-    freq="QS"
+RESULT_DIR = os.path.join(BASE_DIR, "result")
+forecast = pd.read_excel(
+    os.path.join(DATASET_DIR, "dataset_xgboost.xlsx")
 )
 
-forecast = prophet_model.predict(future)
-
-tahun_aktual_terakhir = int(df["Tahun"].max())
-
-tahun_prediksi = sorted(
-    forecast[
-        forecast["ds"].dt.year > tahun_aktual_terakhir
-    ]["ds"].dt.year.unique()
+evaluasi_prophet = pd.read_excel(
+    os.path.join(RESULT_DIR, "evaluasi_prophet.xlsx")
 )
 
-target = "IPM"
-
-X_all = df.drop(columns=["IPM", "Tahun", "Triwulan", "ds", "TW_num"], errors="ignore")
-X_all = X_all.select_dtypes(include=["int64", "float64"])
-y = df[target]
-
-xgb_baseline = xgb.XGBRegressor(
-    n_estimators=50, max_depth=2, random_state=42
+evaluasi_xgboost = pd.read_excel(
+    os.path.join(RESULT_DIR, "evaluasi_xgboost.xlsx")
 )
-xgb_baseline.fit(X_all, y)
-
-baseline_importance = pd.DataFrame({
-    "Fitur": X_all.columns,
-    "Importance": xgb_baseline.feature_importances_
-}).sort_values(by="Importance", ascending=False)
-
-top_5_features = baseline_importance["Fitur"].head(5).tolist()
-
-X_selected = X_all[top_5_features].copy()
-
-kf = KFold(n_splits=5, shuffle=True, random_state=42)
-xgb_mae_scores, xgb_rmse_scores, xgb_r2_scores = [], [], []
-
-for train_idx, test_idx in kf.split(X_selected, y):
-    X_train_f, X_test_f = X_selected.iloc[train_idx], X_selected.iloc[test_idx]
-    y_train_f, y_test_f = y.iloc[train_idx], y.iloc[test_idx]
-    
-    fold_model = xgb.XGBRegressor(
-        n_estimators=60, learning_rate=0.03, max_depth=2,
-        subsample=0.8, colsample_bytree=0.8, random_state=42
-    )
-    fold_model.fit(X_train_f, y_train_f)
-    preds_f = fold_model.predict(X_test_f)
-    
-    xgb_mae_scores.append(mean_absolute_error(y_test_f, preds_f))
-    xgb_rmse_scores.append(np.sqrt(mean_squared_error(y_test_f, preds_f)))
-    xgb_r2_scores.append(r2_score(y_test_f, preds_f))
-
-xgb_mae_cv = np.mean(xgb_mae_scores)
-xgb_rmse_cv = np.mean(xgb_rmse_scores)
-xgb_r2_cv = np.mean(xgb_r2_scores)
-
-xgb_model_final = xgb.XGBRegressor(
-    n_estimators=60, learning_rate=0.03, max_depth=2,
-    subsample=0.8, colsample_bytree=0.8, random_state=42
-)
-xgb_model_final.fit(X_selected, y)
-xgb_model_final.save_model("model_xgb_ipm.json")
 
 mean_shap = pd.read_excel(
-    MEAN_SHAP_PATH
+    os.path.join(RESULT_DIR, "mean_shap.xlsx")
 )
 
 feature_importance = pd.read_excel(
-    FEATURE_IMPORTANCE_PATH
+    os.path.join(RESULT_DIR, "feature_importance.xlsx")
 )
 
 top5 = mean_shap.head(5).reset_index(drop=True)
@@ -179,7 +104,7 @@ if menu == "Beranda":
     Indeks Pembangunan Manusia (IPM) Kota Magelang.
     """)
 
-    
+
     st.subheader("Informasi Dataset")
     df["Tahun"] = pd.to_datetime(df["ds"]).dt.year
 
@@ -202,6 +127,17 @@ elif menu == "Prediksi IPM":
 
     st.title("Prediksi Indeks Pembangunan Manusia (IPM)")
 
+    forecast = pd.read_excel(os.path.join
+        (RESULT_DIR, "forecast_ipm.xlsx")
+    )
+    forecast["ds"] = pd.to_datetime(forecast["ds"])
+
+    tahun_prediksi = sorted(
+    forecast.loc[
+        forecast["ds"].dt.year >= 2026,
+        "ds"
+    ].dt.year.unique())
+
     tahun_pilihan = st.selectbox(
         "Pilih Tahun Prediksi",
         tahun_prediksi
@@ -211,17 +147,17 @@ elif menu == "Prediksi IPM":
         forecast["ds"].dt.year == tahun_pilihan
     ]
 
-    prediksi_ipm = forecast_tahun["yhat"].mean()
+    prediksi_ipm = forecast_tahun["IPM_Prediksi_Prophet"].mean()
 
     forecast_plot = forecast.copy()
     forecast_plot["Tahun"] = forecast_plot["ds"].dt.year
 
     pred_tahun = (
-        forecast_plot.groupby("Tahun")["yhat"]
+        forecast_plot.groupby("Tahun")["IPM_Prediksi_Prophet"]
         .mean()
         .reset_index()
     )
-    
+
     aktual = (
         df.groupby("Tahun")["IPM"]
         .mean()
@@ -235,7 +171,7 @@ elif menu == "Prediksi IPM":
     forecast_plot["Tahun"] = forecast_plot["ds"].dt.year
 
     pred_tahun = (
-        forecast_plot.groupby("Tahun")["yhat"]
+        forecast_plot.groupby("Tahun")["IPM_Prediksi_Prophet"]
         .mean()
         .reset_index()
     )
@@ -278,8 +214,8 @@ elif menu == "Prediksi IPM":
 
     fig.update_xaxes(
         tickmode="linear",
-        tick0=2010, 
-        dtick=2     
+        tick0=2010,
+        dtick=2
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -353,11 +289,16 @@ elif menu == "Prediksi IPM":
         {abs(selisih):.2f} poin.
         """
     )
-    
+
 elif menu == "Analisis Faktor":
 
     st.title("Analisis Faktor yang Mempengaruhi IPM")
-    
+
+    mean_shap = mean_shap.sort_values(
+    by="Mean_SHAP",
+    ascending=False
+    ).reset_index(drop=True)
+
     fig, ax = plt.subplots(
         figsize=(5,2)
     )
@@ -366,6 +307,8 @@ elif menu == "Analisis Faktor":
             mean_shap["Feature"],
             mean_shap["Mean_SHAP"]
     )
+
+    ax.invert_yaxis()
 
     ax.set_title(
     "SHAP Feature Importance"
@@ -380,7 +323,7 @@ elif menu == "Analisis Faktor":
     )
 
     top5 = mean_shap_display.head(5)
-    
+
     st.subheader("Faktor Pendorong Utama")
     st.dataframe(top5, use_container_width=True)
 
@@ -389,12 +332,13 @@ elif menu == "Analisis Faktor":
     f3 = top5.iloc[2]["Faktor Penentu IPM"]
     f4 = top5.iloc[3]["Faktor Penentu IPM"]
     f5 = top5.iloc[4]["Faktor Penentu IPM"]
-    
+
     st.subheader("Rekomendasi Kebijakan")
+
     sudah_tampil = set()
 
     for fitur in top5["Faktor Penentu IPM"]:
-    
+
         if fitur in ["Bekerja", "Pengangguran"]:
             if "ketenagakerjaan" not in sudah_tampil:
                 st.info(
@@ -403,22 +347,51 @@ elif menu == "Analisis Faktor":
                     "serta pengembangan UMKM."
                 )
                 sudah_tampil.add("ketenagakerjaan")
-    
+
         elif fitur in ["BalitaGiziKurang", "BalitaGiziBaik"]:
             if "gizi" not in sudah_tampil:
                 st.info(
-                    "Memperkuat layanan Posyandu, meningkatkan program perbaikan gizi balita, "
-                    "serta edukasi gizi untuk meningkatkan status gizi balita."
+                    "Memperkuat layanan kesehatan ibu dan anak, meningkatkan program "
+                    "perbaikan gizi balita, serta edukasi gizi untuk meningkatkan "
+                    "kualitas kesehatan masyarakat."
                 )
                 sudah_tampil.add("gizi")
-    rekomendasi = {"Pertumbuhan_Ekonomi": "Mendorong pertumbuhan ekonomi daerah melalui investasi dan UMKM."}
-    
-    for fitur in top5["Faktor Penentu IPM"]:
-        if fitur in rekomendasi:
-            st.info(rekomendasi[fitur])
-    
+
+        elif fitur == "Pertumbuhan_Ekonomi":
+            if "ekonomi" not in sudah_tampil:
+                st.info(
+                    "Mendorong pertumbuhan ekonomi daerah melalui peningkatan investasi, "
+                    "pengembangan UMKM, serta penciptaan lapangan kerja."
+                )
+                sudah_tampil.add("ekonomi")
+
+        elif fitur in ["AngkaHarapanHidup", "AngkaKesakitan"]:
+            if "kesehatan" not in sudah_tampil:
+                st.info(
+                    "Meningkatkan kualitas layanan kesehatan, memperluas akses fasilitas "
+                    "kesehatan, serta memperkuat upaya promotif dan preventif."
+                )
+                sudah_tampil.add("kesehatan")
+
+        elif fitur in ["Angka_Melek_Huruf", "APS", "Rata_Rata_Lama_Sekolah"]:
+            if "pendidikan" not in sudah_tampil:
+                st.info(
+                    "Meningkatkan kualitas pendidikan melalui pemerataan akses pendidikan, "
+                    "program beasiswa, peningkatan literasi, serta dukungan agar masyarakat "
+                    "dapat menyelesaikan pendidikan hingga jenjang yang lebih tinggi."
+                )
+                sudah_tampil.add("pendidikan")
+
+        elif fitur == "Jumlah_Penduduk":
+            if "penduduk" not in sudah_tampil:
+                st.info(
+                    "Mengoptimalkan perencanaan pembangunan, penyediaan layanan publik, "
+                    "serta pengendalian laju pertumbuhan penduduk agar pembangunan lebih merata."
+                )
+                sudah_tampil.add("penduduk")
+
     st.subheader("Faktor Yang Perlu Diperhatikan")
-    
+
     st.info(
         f"""
         Faktor utama yang mempengaruhi IPM adalah
@@ -435,24 +408,56 @@ elif menu == "Informasi Sistem":
     st.title("Informasi Performa Model Sistem")
 
     st.subheader("1. Evaluasi Model Prediksi")
+    evaluasi_prophet = pd.read_excel(r"C:\SKRIPSI TUGAS AKHIR\result\evaluasi_prophet.xlsx")
 
     col_p1, col_p2, col_p3 = st.columns(3)
 
-    col_p1.metric("MAE", f"{mae:.4f}")
-    col_p2.metric("RMSE", f"{rmse:.4f}")
-    col_p3.metric("MAPE", f"{mape:.2f}%")
+    col_p1.metric(
+        label="MAE",
+        value=evaluasi_prophet.loc[0, "MAE"]
+    )
 
+    col_p2.metric(
+        label="RMSE",
+        value=evaluasi_prophet.loc[0, "RMSE"]
+    )
+
+    col_p3.metric(
+        label="MAPE",
+        value=evaluasi_prophet.loc[0, "MAPE"]
+    )
     st.markdown("---")
 
     st.subheader("2. Evaluasi Model Kontribusi Faktor")
-    col_x1, col_x2, col_x3 = st.columns(3)
-    
-    col_x1.metric("MAE", round(xgb_mae_cv, 4))
-    col_x2.metric("RMSE", round(xgb_rmse_cv, 4))
-    col_x3.metric("R² Score", round(xgb_r2_cv, 4))
+    evaluasi_xgboost = pd.read_excel(r"C:\SKRIPSI TUGAS AKHIR\result\evaluasi_xgboost.xlsx")
 
+    col_x1, col_x2, col_x3 = st.columns(3)
+
+    col_x1.metric(
+        label="MAE",
+        value=evaluasi_xgboost.loc[0, "MAE"]
+    )
+
+    col_x2.metric(
+        label="RMSE",
+        value=evaluasi_xgboost.loc[0, "RMSE"]
+    )
+
+    col_x3.metric(
+        label="R²",
+        value=evaluasi_xgboost.loc[0, "R²"]
+    )
     st.markdown("---")
+
     st.subheader("Interpretasi Kinerja Komponen")
+
+    mae = evaluasi_prophet.loc[0, "MAE"]
+    rmse = evaluasi_prophet.loc[0, "RMSE"]
+    mape = evaluasi_prophet.loc[0, "MAPE"]
+
+    xgb_mae_cv = evaluasi_xgboost.loc[0, "MAE"]
+    xgb_rmse_cv = evaluasi_xgboost.loc[0, "RMSE"]
+    xgb_r2_cv = evaluasi_xgboost.loc[0, "R²"]
 
     if mape < 10:
         kategori_mape = "Sangat Baik"
@@ -513,25 +518,26 @@ elif menu == "Informasi Sistem":
     """)
 
     st.subheader("Kesimpulan Evaluasi Sistem")
-    
+
     if mape < 10 and xgb_r2_cv > 0.50:
         st.success(f"""
              * Akurasi prediksi IPM menghasilkan nilai kesalahan persentase (MAPE) sebesar **{mape:.2f}%** yang dikategorikan **{kategori_mape}**.
              * Analisis faktor IKM menghasilkan nilai $R^2$ sebesar **{xgb_r2_cv:.4f}** yang menduduki kategori tingkat penjelasan variansi **{kategori_r2}**.
-           
+
             Model menunjukkan performa yang baik dalam melakukan prediksi IPM dan memberikan gambaran yang representatif terhadap variasi data."""
         )
     elif mape < 20 and xgb_r2_cv > 0.30:
         st.success(f"""
              * Akurasi prediksi IPM menghasilkan nilai kesalahan persentase (MAPE) sebesar **{mape:.2f}%** yang dikategorikan **{kategori_mape}**.
              * Analisis faktor IKM menghasilkan nilai $R^2$ sebesar **{xgb_r2_cv:.4f}** yang menduduki kategori tingkat penjelasan variansi **{kategori_r2}**.
-            
+
             Model memiliki tingkat akurasi yang cukup baik dan dapat digunakan untuk membantu proses prediksi."""
         )
     else:
         st.warning(f"""
              * Akurasi prediksi IPM menghasilkan nilai kesalahan persentase (MAPE) sebesar **{mape:.2f}%** yang dikategorikan **{kategori_mape}**.
              * Analisis faktor IKM menghasilkan nilai $R^2$ sebesar **{xgb_r2_cv:.4f}** yang menduduki kategori tingkat penjelasan variansi **{kategori_r2}**.
-           
+
             Model masih dapat digunakan, namun hasil prediksi perlu diinterpretasikan dengan hati-hati."""
         )
+
