@@ -408,7 +408,9 @@ elif menu == "Informasi Sistem":
     st.title("Informasi Performa Model Sistem")
 
     st.subheader("1. Evaluasi Model Prediksi")
-    evaluasi_prophet = pd.read_excel(r"C:\SKRIPSI TUGAS AKHIR\result\evaluasi_prophet.xlsx")
+    evaluasi_prophet = pd.read_excel(
+        os.path.join("evaluasi_prophet.xlsx")
+    )
 
     col_p1, col_p2, col_p3 = st.columns(3)
 
@@ -429,7 +431,9 @@ elif menu == "Informasi Sistem":
     st.markdown("---")
 
     st.subheader("2. Evaluasi Model Kontribusi Faktor")
-    evaluasi_xgboost = pd.read_excel(r"C:\SKRIPSI TUGAS AKHIR\result\evaluasi_xgboost.xlsx")
+    evaluasi_xgboost = pd.read_excel(
+        os.path.join("evaluasi_xgboost.xlsx")
+    )
 
     col_x1, col_x2, col_x3 = st.columns(3)
 
