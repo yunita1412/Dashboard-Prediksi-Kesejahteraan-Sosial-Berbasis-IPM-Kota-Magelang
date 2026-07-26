@@ -37,23 +37,20 @@ BASE_DIR = os.path.dirname(
 )
 
 DATA_PATH = os.path.join(
-    BASE_DIR, "DATASET", "dataset_final.xlsx"
+    BASE_DIR, "dataset_final.xlsx"
 )
 
 FORECAST_IPM = os.path.join(
-    BASE_DIR, "result", "forecast_ipm.xlxs"
+    BASE_DIR, "forecast_ipm.xlxs"
 )
 
 MEAN_SHAP_PATH = os.path.join(
-    BASE_DIR, "result", "mean_shap.xlsx"
+    BASE_DIR, "mean_shap.xlsx"
 )
 
 FEATURE_IMPORTANCE_PATH = os.path.join(
-    BASE_DIR, "result", "feature_importance.xlsx"
+    BASE_DIR, "feature_importance.xlsx"
 )
-
-RESULT_DIR = os.path.join(BASE_DIR, "result")
-DATASET_DIR = os.path.join(BASE_DIR, "DATASET")
 
 if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(
@@ -128,7 +125,7 @@ elif menu == "Prediksi IPM":
     st.title("Prediksi Indeks Pembangunan Manusia (IPM)")
 
     forecast = pd.read_excel(os.path.join
-        (RESULT_DIR, "forecast_ipm.xlsx")
+        ("forecast_ipm.xlsx")
     )
     forecast["ds"] = pd.to_datetime(forecast["ds"])
 
